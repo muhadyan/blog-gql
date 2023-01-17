@@ -1,0 +1,76 @@
+scalar Time
+
+# Base schema
+type User {
+  id: Int!
+  username: String!
+  password: String!
+  email: String!
+  fullname: String!
+  is_active: Boolean!
+  token: String
+  created_at: Time!
+  updated_at: Time!
+}
+
+type UserDataResponse {
+  id: Int!
+  username: String!
+  email: String!
+  fullname: String!
+  is_active: Boolean!
+  token: String
+  created_at: String!
+  updated_at: String!
+}
+
+# Register schema
+input RegisterUserRequest {
+  username: String!
+  password: String!
+  email: String!
+  fullname: String!
+}
+
+type RegisterDataResponse {
+  id: Int!
+  username: String!
+  email: String!
+  fullname: String!
+  is_active: Boolean!
+  created_at: String!
+  updated_at: String!
+}
+
+type RegisterUserResponse {
+  message: String!
+  user: RegisterDataResponse!
+}
+
+# Verify schema
+input VerifyUserRequest {
+  user_id: Int!
+  token: String!
+}
+
+type VerifyUserResponse {
+  message: String!
+  user: UserDataResponse!
+}
+
+# Login
+input LoginRequest {
+  username: String!
+  password: String!
+}
+
+type LoginResponse {
+  message: String!
+  user: UserDataResponse!
+}
+
+extend type Mutation {
+  registerUser(data: RegisterUserRequest!): RegisterUserResponse
+  verifyUser(data: VerifyUserRequest!): VerifyUserResponse
+  login(data: LoginRequest!): LoginResponse
+}

@@ -1,0 +1,26 @@
+# Base schema
+type ChildComment {
+  id: Int!
+  comment_id: Int!
+  user_id: Int!
+  comment: String!
+  is_approved: Boolean!
+  created_at: Time!
+}
+
+# Create child comment
+input CreateChildCommentRequest {
+  comment_id: Int!
+  comment: String!
+}
+
+type CreateChildCommentResponse {
+  message: String!
+  child_comment: ChildComment!
+}
+
+extend type Mutation {
+  createChildComment(
+    data: CreateChildCommentRequest!
+  ): CreateChildCommentResponse
+}

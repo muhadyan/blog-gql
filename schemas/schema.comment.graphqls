@@ -1,0 +1,73 @@
+# Base schema
+type Comment {
+  id: Int!
+  article_id: Int!
+  user_id: Int!
+  comment: String!
+  is_approved: Boolean!
+  created_at: Time!
+}
+
+# Create comment
+input CreateCommentRequest {
+  article_id: Int!
+  comment: String!
+}
+
+type CreateCommentResponse {
+  message: String!
+  comment: Comment!
+}
+
+# Approve comment
+input ApproveCommentRequest {
+  comment_id: Int!
+  is_child: Boolean!
+}
+
+type ApproveCommentResponse {
+  message: String!
+}
+
+# Get comments
+enum CommentOrderBy {
+  id
+  created_at
+}
+
+enum CommentSortBy {
+  asc
+  desc
+}
+
+input GetCommentsRequest {
+  article_id: Int!
+  order_by: CommentOrderBy!
+  sort_by: CommentSortBy!
+}
+
+type GetCommentsResult {
+  message: String!
+  comments: [Comment]!
+}
+
+# Get comment
+input GetCommentRequest {
+  comment_id: Int!
+}
+
+type GetCommentResult {
+  message: String!
+  comment: Comment!
+  child: [ChildComment]!
+}
+
+extend type Query {
+  getComments(request: GetCommentsRequest!): GetCommentsResult
+  getComment(request: GetCommentRequest!): GetCommentResult
+}
+
+extend type Mutation {
+  createComment(data: CreateCommentRequest!): CreateCommentResponse
+  approveComment(data: ApproveCommentRequest!): ApproveCommentResponse
+}

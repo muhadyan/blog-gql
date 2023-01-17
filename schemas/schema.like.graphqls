@@ -1,0 +1,35 @@
+# Base schema
+type Like {
+  id: Int!
+  article_id: Int!
+  user_id: Int!
+  created_at: Time!
+}
+
+# Create like
+input CreateLikeRequest {
+  article_id: Int!
+}
+
+type CreateLikeResponse {
+  message: String!
+  like: Like!
+}
+
+# Get likes
+input GetLikesRequest {
+  article_id: Int!
+}
+
+type GetLikesResult {
+  message: String!
+  likes: [Like]!
+}
+
+extend type Query {
+  getLikes(request: GetLikesRequest!): GetLikesResult
+}
+
+extend type Mutation {
+  createLike(data: CreateLikeRequest!): CreateLikeResponse
+}
