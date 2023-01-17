@@ -1,0 +1,10 @@
+type Query {
+  Hello: String
+}
+
+type Pagination {
+  totalPage: Int!
+  totalData: Int!
+  pageSize: Int!
+  page: Int!
+}

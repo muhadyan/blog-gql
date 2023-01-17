@@ -1,0 +1,92 @@
+# Base schema
+type Article {
+  id: Int!
+  user_id: Int!
+  title: String!
+  content: String!
+  likes: Int!
+  comments: Int!
+  is_moderated: Boolean!
+  created_at: Time!
+  updated_at: Time!
+}
+
+# Create article
+input CreateArticleRequest {
+  title: String!
+  content: String!
+  is_moderated: Boolean!
+}
+
+type CreateArticleResponse {
+  message: String!
+  article: Article!
+}
+
+# Update article
+input UpdateArticleRequest {
+  article_id: Int!
+  title: String
+  content: String
+  is_moderated: Boolean
+}
+
+type UpdateArticleResponse {
+  message: String!
+  article: Article!
+}
+
+# Delete article
+input DeleteArticleRequest {
+  article_id: Int!
+}
+
+type DeleteArticleResponse {
+  message: String!
+}
+
+# Get articles
+enum ArticleOrderBy {
+  id
+  created_at
+  user_id
+  comments
+  likes
+}
+
+enum ArticleSortBy {
+  asc
+  desc
+}
+
+input GetArticlesRequest {
+  search: String
+  order_by: ArticleOrderBy!
+  sort_by: ArticleSortBy!
+}
+
+type GetArticlesResult {
+  message: String!
+  articles: [Article]!
+}
+
+# Get article
+input GetArticleRequest {
+  article_id: Int!
+}
+
+type GetArticleResult {
+  message: String!
+  article: Article!
+}
+
+extend type Query {
+  getArticles(request: GetArticlesRequest!): GetArticlesResult
+  getArticle(request: GetArticleRequest!): GetArticleResult
+}
+
+extend type Mutation {
+  createArticle(data: CreateArticleRequest!): CreateArticleResponse
+  updateArticle(data: UpdateArticleRequest!): UpdateArticleResponse
+  deleteArticle(data: DeleteArticleRequest!): DeleteArticleResponse
+}
