@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Child Comment Notification</title>
+  </head>
+  <body>
+    <h1>Hi, {{ .CommentUser }}</h1>
+    <p>
+      Komentar kamu pada artikel <strong>{{ .ArticleName }}</strong> mendapatkan
+      Komentar dari akun
+      <strong>{{ .ChilCommentUser }}</strong>
+    </p>
+  </body>
+</html>

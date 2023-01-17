@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/muhadyan/blog-graphql-api/graph/model"
 	"github.com/muhadyan/blog-graphql-api/repository"
@@ -41,6 +42,31 @@ func (s *likeCtx) Create(ctx context.Context, data model.CreateLikeRequest, user
 	if err != nil {
 		return nil, err
 	}
+
+	go func() {
+		articleUser, err := repository.GetUser(model.User{
+			ID: article.UserID,
+		})
+		if err != nil {
+			return
+		}
+		likeUser, err := repository.GetUser(model.User{
+			ID: userID,
+		})
+		if err != nil {
+			return
+		}
+
+		templateEmail := "./template/like.html"
+		sendRequest := helper.SendMailModel{
+			SendTo:      articleUser.Email,
+			ArticleUser: articleUser.Fullname,
+			ArticleName: article.Title,
+			LikeUser:    likeUser.Username,
+		}
+		subject := fmt.Sprintf("Like Notification In %s!", article.Title)
+		helper.SendMail(templateEmail, sendRequest, subject)
+	}()
 
 	res := model.CreateLikeResponse{
 		Message: "Success",

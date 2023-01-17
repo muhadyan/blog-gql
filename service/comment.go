@@ -51,6 +51,31 @@ func (s *commentCtx) Create(ctx context.Context, data model.CreateCommentRequest
 		return nil, err
 	}
 
+	go func() {
+		articleUser, err := repository.GetUser(model.User{
+			ID: article.UserID,
+		})
+		if err != nil {
+			return
+		}
+		commentUser, err := repository.GetUser(model.User{
+			ID: userID,
+		})
+		if err != nil {
+			return
+		}
+
+		templateEmail := "./template/comment.html"
+		sendRequest := helper.SendMailModel{
+			SendTo:      articleUser.Email,
+			ArticleUser: articleUser.Fullname,
+			ArticleName: article.Title,
+			CommentUser: commentUser.Username,
+		}
+		subject := fmt.Sprintf("Comment Notification In %s!", article.Title)
+		helper.SendMail(templateEmail, sendRequest, subject)
+	}()
+
 	res := model.CreateCommentResponse{
 		Message: "Success",
 		Comment: &model.Comment{

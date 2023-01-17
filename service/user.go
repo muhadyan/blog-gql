@@ -52,6 +52,18 @@ func (s *userCtx) Register(ctx context.Context, data model.RegisterUserRequest) 
 		return nil, err
 	}
 
+	go func() {
+		templateEmail := "./template/verify.html"
+		sendRequest := helper.SendMailModel{
+			SendTo: user.Email,
+			User:   user.Fullname,
+			Token:  token,
+			UserID: user.ID,
+		}
+		subject := fmt.Sprintf("Account %s Verification!", user.Username)
+		helper.SendMail(templateEmail, sendRequest, subject)
+	}()
+
 	res := model.RegisterUserResponse{
 		Message: "Success",
 		User: &model.RegisterDataResponse{
