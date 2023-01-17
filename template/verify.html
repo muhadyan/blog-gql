@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verifikasi Akun</title>
+  </head>
+  <body>
+    <h1>Hi, {{ .User }}</h1>
+    <p>Untuk verifikasi akunmu, silahkan melakukan step di bawah ini yaa</p>
+    <ol>
+      <li>Menuju verifyUser pada mutation GraphQL</li>
+      <li>Masukan token {{ .Token }}</li>
+      <li>Masukkan user_id {{ .UserID }}</li>
+    </ol>
+  </body>
+</html>

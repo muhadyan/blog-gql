@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/muhadyan/blog-graphql-api/graph/model"
 	"github.com/muhadyan/blog-graphql-api/repository"
@@ -46,6 +47,31 @@ func (s *childCommentCtx) Create(ctx context.Context, data model.CreateChildComm
 	if err != nil {
 		return nil, err
 	}
+
+	go func() {
+		commentUser, err := repository.GetUser(model.User{
+			ID: comment.UserID,
+		})
+		if err != nil {
+			return
+		}
+		childCommentUser, err := repository.GetUser(model.User{
+			ID: userID,
+		})
+		if err != nil {
+			return
+		}
+
+		templateEmail := "./template/child_comment.html"
+		sendRequest := helper.SendMailModel{
+			SendTo:          commentUser.Email,
+			CommentUser:     commentUser.Fullname,
+			ArticleName:     article.Title,
+			ChilCommentUser: childCommentUser.Username,
+		}
+		subject := fmt.Sprintf("Comment Of Your Comment In %s!", article.Title)
+		helper.SendMail(templateEmail, sendRequest, subject)
+	}()
 
 	res := model.CreateChildCommentResponse{
 		Message: "Success",
