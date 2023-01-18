@@ -11,6 +11,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/muhadyan/blog-graphql-api/graph/model"
+
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 

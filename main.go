@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -12,6 +13,7 @@ import (
 	"github.com/muhadyan/blog-graphql-api/auth"
 	"github.com/muhadyan/blog-graphql-api/config"
 	"github.com/muhadyan/blog-graphql-api/graph/generated"
+	logUtil "github.com/muhadyan/blog-graphql-api/log"
 	"github.com/muhadyan/blog-graphql-api/resolver"
 	"github.com/muhadyan/blog-graphql-api/service"
 )
@@ -44,7 +46,9 @@ func main() {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(schema))
 
 	router := chi.NewRouter()
+	startTime := time.Now()
 	router.Use(auth.Middleware())
+	router.Use(logUtil.MiddlewareLog(startTime))
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	router.Handle("/query", srv)
 
